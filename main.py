@@ -1,5 +1,5 @@
-#MAIN FILE
-#THIS IS THE EXEC NN FILE
+# MAIN FILE
+# THIS IS THE EXEC NN FILE
 
 from flask import Flask, render_template, Response
 import cv2
@@ -16,9 +16,10 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
-hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3, max_num_hands= 2)
+hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3, max_num_hands=2)
 
 cap = cv2.VideoCapture(0)
+
 
 def generate_frames():
     while True:
@@ -59,7 +60,7 @@ def generate_frames():
             y2 = int(max(y_) * H) - 10
 
             prediction = model.predict([np.asarray(data_aux)])
-            print("prediction: ",prediction)
+            print("prediction: ", prediction)
 
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
             cv2.putText(frame, str(prediction), (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
@@ -70,13 +71,16 @@ def generate_frames():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=8080)

@@ -35,7 +35,7 @@ for i in range(classes):
         cv2.imshow("frame", frame)
         cv2.waitKey(50)
         timestamp = int(time.time())
-        cv2.imwrite(os.path.join(DATA_DIR, letter, 'a{}_{}.jpg'.format(counter, timestamp)), frame)
+        cv2.imwrite(os.path.join(DATA_DIR, letter, '{}-{}_{}.jpg'.format(letter,counter, timestamp)), frame)
 
         counter += 1
 
